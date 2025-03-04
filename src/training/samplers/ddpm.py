@@ -66,7 +66,7 @@ class DDPMSampler(nn.Module):
 
             x_mean = alpha_cur * x0 + (1 - alpha_cur) * x_cur  # Compute x_mean for the next step
 
-            var_t = (1 - gammas[step + 1]) * (1 - alpha_cur) / (1 - gammas[step])  # Compute the variance
+            var_t = (1 - g_next) * (1 - alpha_cur) / (1 - g_cur)  # Compute the variance
 
             # Sample noise from standard normal distribution and adjust with sqrt(var_t)
             noise = randn_like(x_cur) * torch.sqrt(var_t)
