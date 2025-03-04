@@ -18,6 +18,8 @@ class SimilarityScore(Metric):
         feats_2: TensorType["num_samples", "num_feats"],
     ) -> float:
         """Update state with new features."""
+        normed_feats_1 = torch.nn.functional.normalize(feats_1, p=2, dim=-1)
+        normed_feats_2 = torch.nn.functional.normalize(feats_2, p=2, dim=-1)
         # ----------------------------------------------------------------------------- #
         # Complete this part for `Code 11`
         # normed_feats_1 = ...
@@ -36,4 +38,5 @@ class SimilarityScore(Metric):
         # score = ...
         # ----------------------------------------------------------------------------- #
 
+        score = torch.sum(feats_1 * feats_2, dim=-1).mean()
         return torch.max(score, torch.zeros_like(score))

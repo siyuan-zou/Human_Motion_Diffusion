@@ -29,7 +29,7 @@ class DDPMLoss:
             / self.num_steps
         )
 
-        gamma = self.scheduler(timesteps)[..., None, None]
+        gamma = self.scheduler(timesteps)[..., None, None] # alpha_t
         n = torch.randn_like(data)
         # ------------------------------------------------------------------------- #
         # Complete this part for `Code 6`
@@ -40,10 +40,10 @@ class DDPMLoss:
         # loss = ...
         # ------------------------------------------------------------------------- #
         
-        data_n = gamma * data + (1 - gamma ** 2) ** 0.5 * n
+        data_n = torch.sqrt(gamma) * data + torch.sqrt(1 - gamma) * n
         D_yn = net(gamma, data_n, conds, mask)
 
-        loss = torch.mean((D_yn - data) ** 2)
+        loss = torch.mean((D_yn - n) ** 2)
 
         return loss
 

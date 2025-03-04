@@ -64,7 +64,7 @@ class DDPMSampler(nn.Module):
             # x_next = ...
             # ------------------------------------------------------------------------- #
 
-            x_mean = alpha_cur * x0 + (1 - alpha_cur) * x_cur  # Compute x_mean for the next step
+            x_mean = torch.sqrt(alpha_cur) * (1 - g_next) / (1 - g_cur) * x_cur + torch.sqrt(g_next) * (1 - alpha_cur) / (1 - g_cur) * x0  # Compute x_mean for the next step
 
             var_t = (1 - g_next) * (1 - alpha_cur) / (1 - g_cur)  # Compute the variance
 

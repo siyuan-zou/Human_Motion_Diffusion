@@ -30,6 +30,19 @@ def _compute_fd(mu1: Tensor, sigma1: Tensor, mu2: Tensor, sigma2: Tensor) -> Ten
     # b = ...
     # c = torch.linalg.eigvals(...).sqrt().real.sum(dim=-1)
     # --------------------------------------------------------------------------------- #
+
+    a = torch.norm(mu1 - mu2, p=2) ** 2
+    b = torch.trace(sigma1 + sigma2)
+    
+    # Compute the square root of the product of covariance matrices using the sqrtm function
+    sqrt_sigma = torch.linalg.sqrtm(sigma1 @ sigma2)
+    
+    # Ensure numerical stability in case of complex eigenvalues
+    if torch.is_complex(sqrt_sigma):
+        sqrt_sigma = sqrt_sigma.real
+    
+    c = torch.trace(sqrt_sigma)
+    
     return a + b - 2 * c
 
 
